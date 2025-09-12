@@ -1,0 +1,109 @@
+<resources>
+    <string name="app_name">Hemoam/AM</string>
+    <string name="app_description">Aplicativo de doação de sangue do Hemocentro do Amazonas</string>
+
+    <!-- Navegação -->
+    <string name="back_button">Voltar</string>
+    <string name="next_button">Continuar</string>
+    <string name="finish_button">Finalizar</string>
+
+    <!-- Tela inicial -->
+    <string name="home_title">Hemoam/AM</string>
+    <string name="home_subtitle">Salvando vidas em Manaus</string>
+    <string name="hero_text_1">Sua doação pode salvar</string>
+    <string name="hero_text_2">até 4 vidas</string>
+    <string name="critical_stock">Estoque Crítico</string>
+    <string name="urgent_badge">URGENTE</string>
+    <string name="low_stock_description">Baixo estoque de sangue no Hemoam/AM</string>
+    <string name="transplant_queue">Fila de Transplantes</string>
+    <string name="waiting_people">pessoas em Manaus aguardam por um transplante</string>
+    <string name="schedule_donation">Agendar Doação</string>
+
+    <!-- Agendamento -->
+    <string name="user_data_title">Seus Dados</string>
+    <string name="quick_login">Login Rápido</string>
+    <string name="login_description">Entre com suas credenciais ou crie uma conta</string>
+    <string name="full_name">Nome Completo</string>
+    <string name="email">E-mail</string>
+    <string name="phone">Telefone</string>
+    <string name="phone_placeholder">(92) 99999-9999</string>
+
+    <string name="requirements_title">Requisitos para Doação</string>
+    <string name="requirements_description">Verifique se você atende aos critérios básicos</string>
+    <string name="meet_requirements">Atendo aos Requisitos</string>
+
+    <string name="scheduling_title">Agendamento</string>
+    <string name="donation_type">Tipo de Doação</string>
+    <string name="available_times">Horário Disponível</string>
+
+    <string name="confirmation_title">Agendamento Confirmado</string>
+    <string name="finish_scheduling">Finalizar Agendamento</string>
+
+    <!-- Preparação -->
+    <string name="preparation_title">Preparação</string>
+    <string name="next_donation">Próxima Doação</string>
+    <string name="appointment_details">Detalhes do Agendamento</string>
+    <string name="how_to_prepare">Como se Preparar</string>
+    <string name="prepare_description">Siga essas dicas para uma doação segura</string>
+    <string name="required_documents">Documentos Necessários</string>
+    <string name="checkin_button">Fazer Check-in no Local</string>
+    <string name="checkin_instruction">Use este botão quando estiver no Hemoam/AM</string>
+
+    <!-- Check-in -->
+    <string name="checkin_title">Check-in</string>
+    <string name="ready_to_donate">Pronto para Doação</string>
+    <string name="welcome_hemoam">Bem-vindo ao Hemoam/AM!</string>
+    <string name="show_qr_code">Apresente seu QR Code no balcão de atendimento</string>
+    <string name="your_qr_code">Seu QR Code</string>
+    <string name="qr_description">Mostre este código no balcão para agilizar o atendimento</string>
+    <string name="alternative_code">Código alternativo:</string>
+    <string name="donation_details">Detalhes da Doação</string>
+    <string name="location_title">Localização</string>
+    <string name="hemoam_address">Av. Constantino Nery, 4397 - Chapada\nManaus - AM, 69050-001</string>
+    <string name="operating_hours">Funcionamento: 7h às 17h</string>
+    <string name="phone_number">(92) 2127-4300</string>
+    <string name="open_maps">Abrir no Google Maps</string>
+    <string name="instructions_title">Instruções:</string>
+    <string name="finish_checkin">Finalizar Check-in</string>
+
+    <!-- Pós-doação -->
+    <string name="thank_you">Obrigado!</string>
+    <string name="donation_thank_message">Sua doação pode salvar até 4 vidas</string>
+    <string name="donation_completed">Doação Realizada com Sucesso</string>
+    <string name="your_impact">Seu Impacto</string>
+    <string name="lives_saved_today">Vidas Salvas Hoje</string>
+    <string name="total_donations">Total de Doações</string>
+    <string name="progress_to_silver">Progresso para Herói de Prata</string>
+    <string name="share_good_deed">Compartilhe sua Boa Ação</string>
+    <string name="inspire_others">Inspire outras pessoas a doarem sangue também</string>
+    <string name="your_achievements">Suas Conquistas</string>
+    <string name="unlocked_achievement">Desbloqueado</string>
+    <string name="next_donation_date">Próxima Doação</string>
+    <string name="can_donate_again">Você poderá doar novamente em:</string>
+    <string name="schedule_new_donation">Agendar Nova Doação</string>
+    <string name="wait_period">Aguardar Prazo</string>
+    <string name="donation_history">Histórico de Doações</string>
+    <string name="lives_saved_history">vidas salvas</string>
+
+    <!-- Tipos de doação -->
+    <string name="blood_donation">Doação de Sangue</string>
+    <string name="platelet_donation">Doação de Plaquetas</string>
+    <string name="plasma_donation">Doação de Plasma</string>
+
+    <!-- Geral -->
+    <string name="date_and_time">Data e Hora</string>
+    <string name="location">Local</string>
+    <string name="type">Tipo</string>
+    <string name="donor">Doador</string>
+    <string name="name">Nome</string>
+    <string name="days">dias</string>
+    <string name="points">pontos</string>
+
+    <!-- Mensagens de erro -->
+    <string name="error_network">Erro de conexão. Verifique sua internet.</string>
+    <string name="error_generic">Ocorreu um erro. Tente novamente.</string>
+
+    <!-- Notificações -->
+    <string name="notification_title">Lembrete de Doação</string>
+    <string name="notification_message">Sua doação está agendada para amanhã! Prepare-se: durma bem, se alimente e hidrate-se.</string>
+</resources>
