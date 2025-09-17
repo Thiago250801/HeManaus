@@ -35,7 +35,7 @@ fun HemoamCard(
         onClick = onClick ?: {}
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(bottom = 16.dp),
             content = content
         )
     }
