@@ -1,22 +1,21 @@
-package com.example.hemanaus.ui.theme
+package com.hemoam.app.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import com.example.hemanaus.ui.theme.Shapes
+import com.example.hemanaus.ui.theme.Typography
 
-// Cores principais da aplicação
+// Cores principais da aplicação - Hemoam (vermelho, branco, azul)
 val Red600 = Color(0xFFDC2626)
 val Red700 = Color(0xFFB91C1C)
+val Red800 = Color(0xFF991B1B)
 val Red50 = Color(0xFFFEF2F2)
 val Red100 = Color(0xFFFEE2E2)
+val Red200 = Color(0xFFFECACA)
 
 val Green600 = Color(0xFF059669)
 val Green700 = Color(0xFF047857)
@@ -25,6 +24,7 @@ val Green100 = Color(0xFFDCFCE7)
 
 val Blue600 = Color(0xFF2563EB)
 val Blue700 = Color(0xFF1D4ED8)
+val Blue800 = Color(0xFF1E40AF)
 val Blue50 = Color(0xFFEFF6FF)
 val Blue100 = Color(0xFFDBEAFE)
 
@@ -33,6 +33,7 @@ val Orange50 = Color(0xFFFFF7ED)
 val Orange100 = Color(0xFFFFEDD5)
 
 val Yellow600 = Color(0xFFD97706)
+val Yellow800 = Color(0xFF92400E)
 val Yellow50 = Color(0xFFFEFBF3)
 val Yellow100 = Color(0xFFFEF3C7)
 
@@ -45,34 +46,6 @@ val Gray600 = Color(0xFF4B5563)
 val Gray700 = Color(0xFF374151)
 val Gray800 = Color(0xFF1F2937)
 val Gray900 = Color(0xFF111827)
-
-
-private val DarkColorScheme = darkColorScheme(
-    primary = Red600,
-    onPrimary = Color.White,
-    primaryContainer = Red700,
-    onPrimaryContainer = Red100,
-    secondary = Blue600,
-    onSecondary = Color.White,
-    secondaryContainer = Blue700,
-    onSecondaryContainer = Blue100,
-    tertiary = Green600,
-    onTertiary = Color.White,
-    tertiaryContainer = Green700,
-    onTertiaryContainer = Green100,
-    error = Red600,
-    onError = Color.White,
-    errorContainer = Red700,
-    onErrorContainer = Red100,
-    background = Gray900,
-    onBackground = Color.White,
-    surface = Gray800,
-    onSurface = Color.White,
-    surfaceVariant = Gray700,
-    onSurfaceVariant = Gray400,
-    outline = Gray600,
-    outlineVariant = Gray700
-)
 
 private val LightColorScheme = lightColorScheme(
     primary = Red600,
@@ -101,19 +74,39 @@ private val LightColorScheme = lightColorScheme(
     outlineVariant = Gray100
 )
 
+private val DarkColorScheme = darkColorScheme(
+    primary = Red600,
+    onPrimary = Color.White,
+    primaryContainer = Red700,
+    onPrimaryContainer = Red100,
+    secondary = Blue600,
+    onSecondary = Color.White,
+    secondaryContainer = Blue700,
+    onSecondaryContainer = Blue100,
+    tertiary = Green600,
+    onTertiary = Color.White,
+    tertiaryContainer = Green700,
+    onTertiaryContainer = Green100,
+    error = Red600,
+    onError = Color.White,
+    errorContainer = Red700,
+    onErrorContainer = Red100,
+    background = Gray900,
+    onBackground = Color.White,
+    surface = Gray800,
+    onSurface = Color.White,
+    surfaceVariant = Gray700,
+    onSurfaceVariant = Gray400,
+    outline = Gray600,
+    outlineVariant = Gray700
+)
+
 @Composable
-fun HeManausTheme(
+fun HemoamTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
@@ -121,7 +114,7 @@ fun HeManausTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content,
-        shapes = Shapes
+        shapes = Shapes,
+        content = content
     )
 }
