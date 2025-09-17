@@ -1,4 +1,4 @@
-package com.example.hemanaus.data
+package com.example.hemanaus.core.model
 import java.time.LocalTime
 import java.time.LocalDate
 
