@@ -12,13 +12,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import com.example.hemanaus.ui.theme.HeManausTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 import androidx.navigation.compose.rememberNavController
-import com.example.hemanaus.data.Booking
-import com.example.hemanaus.screens.HomeScreen
+import com.example.hemanaus.core.model.Booking
+import com.example.hemanaus.ui.screens.HomeScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,9 +26,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            HeManausTheme {
                 HeManausApp()
-            }
         }
     }
 }
@@ -58,5 +55,7 @@ fun HeManausApp() {
         }
     }
 }
+
+
 
 
