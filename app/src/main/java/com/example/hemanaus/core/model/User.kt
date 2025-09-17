@@ -1,4 +1,4 @@
-package com.example.hemanaus.data
+package com.example.hemanaus.core.model
 
 data class User(
     val id: Long = System.currentTimeMillis(),
