@@ -17,6 +17,8 @@ import androidx.navigation.compose.composable
 
 import androidx.navigation.compose.rememberNavController
 import com.example.hemanaus.core.model.Booking
+import com.example.hemanaus.core.model.User
+import com.example.hemanaus.ui.screens.AuthScreen
 import com.example.hemanaus.ui.screens.HomeScreen
 
 class MainActivity : ComponentActivity() {
@@ -34,21 +36,35 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun HeManausApp() {
     val navController = rememberNavController()
-    val currentBooking by remember { mutableStateOf<Booking?>(null) }
+    var currentUser by remember { mutableStateOf<User?>(null) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+        val startRoute = if (currentUser == null) "home" else "auth"
         NavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = startRoute,
             modifier = Modifier.fillMaxSize()
         ) {
+            // HomeScreen
             composable("home") {
                 HomeScreen(
                     onStartDonation = {
+                        // Navega para a tela de autenticação
+                        navController.navigate("auth")
+                    }
+                )
+            }
 
+            // AuthScreen
+            composable("auth") {
+                AuthScreen(
+                    onBackToHome = { navController.popBackStack() }, // Voltar para Home
+                    onAuthSucess = { user ->
+                        currentUser = user
+                        navController.popBackStack() // Voltar para Home após login
                     }
                 )
             }
