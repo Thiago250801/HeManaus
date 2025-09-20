@@ -360,7 +360,7 @@ private fun BenefitItem(
         Text(
             text = text,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = Gray500
         )
     }
 }
