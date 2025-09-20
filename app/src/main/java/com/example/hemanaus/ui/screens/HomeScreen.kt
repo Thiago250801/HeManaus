@@ -1,5 +1,6 @@
 package com.example.hemanaus.ui.screens
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,10 +16,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Warning
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,11 +35,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import coil.compose.AsyncImage
+import com.example.hemanaus.R
 import com.example.hemanaus.core.model.StockStatus
 import com.example.hemanaus.core.model.bloodStockLevel
 import com.example.hemanaus.ui.components.BloodStockItem
@@ -159,7 +168,7 @@ fun HomeScreen(
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
-                                imageVector = Icons.Default.Warning,
+                                imageVector = Icons.Outlined.Warning,
                                 contentDescription = "Alerta de estoque crítico",
                                 modifier = Modifier.size(22.dp),
                                 tint = Red700
@@ -217,9 +226,145 @@ fun HomeScreen(
             }
         }
 
+        // Fila de Transplantes
+        item {
+            HemoamCard(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth()
+            ) {
+                Column {
+                    // Header
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Orange100, shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                            .padding(12.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.group),
+                            contentDescription = "Ícone de fila de transplantes",
+                            modifier = Modifier.size(24.dp),
+                            tint = Orange600
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Fila de Transplantes",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                            color = Orange800
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Subtítulo
+                    Text(
+                        text = "Pessoas aguardando em Manaus",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Orange600,
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Número grande + descrição
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp)
+                    ) {
+                        Text(
+                            text = "123",
+                            style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold),
+                            color = Orange700
+                        )
+                        Text(
+                            text = "pessoas em Manaus aguardam por um transplante",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Orange600,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+        }
+
+
+
+        // CTA para Doação
+        item {
+            Column(
+                modifier = Modifier.padding(horizontal = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // Botão principal de agendar doação
+                Button(
+                    onClick = onStartDonation,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Red600,
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Agendar Doação",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 16.sp
+                    )
+                }
+
+                // Benefícios/Features
+                Column(
+                ) {
+                    BenefitItem(text = "Processo rápido e seguro")
+                    BenefitItem(text = "Lembretes automáticos")
+                    BenefitItem(text = "Acompanhe seu impacto")
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                }
+            }
+        }
     }
 
 }
+
+@Composable
+private fun BenefitItem(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            imageVector = Icons.Default.Check,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = Green600
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
 
 @Preview
 @Composable
