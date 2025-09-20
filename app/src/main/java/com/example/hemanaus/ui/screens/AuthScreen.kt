@@ -1,0 +1,330 @@
+package com.example.hemanaus.ui.screens
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.example.hemanaus.core.model.AuthProvider
+import com.example.hemanaus.core.model.User
+import com.example.hemanaus.ui.components.HemoamButton
+import com.example.hemanaus.ui.components.HemoamCard
+import com.hemoam.app.ui.theme.Blue50
+import com.hemoam.app.ui.theme.Blue700
+import com.hemoam.app.ui.theme.Blue800
+import com.hemoam.app.ui.theme.Red50
+import com.hemoam.app.ui.theme.Red600
+import com.hemoam.app.ui.theme.Red700
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+@Composable
+fun AuthScreen(
+    onBackToHome: () -> Unit,
+    onAuthSucess: (User) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var isLogin by remember { mutableStateOf(true) }
+    var isLoading by remember { mutableStateOf(false) }
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+    var confirmPasswordVisible by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    val scope = rememberCoroutineScope()
+
+    fun validateForm(): String? {
+        return when {
+            email.isEmpty() -> "Email é obrigatório"
+            password.isEmpty() -> "Senha é obrigatória"
+            !isLogin && name.isEmpty() -> "Nome é obrigatório"
+            !isLogin && password.length < 6 -> "Senha deve ter pelo menos 6 caracteres"
+            !isLogin && password != confirmPassword -> "Senhas não coincidem"
+            else -> null
+        }
+    }
+
+    val onBack: () -> Unit = {
+        if (!isLogin) {
+            // Se estiver no criar conta, volta apenas para Login
+            isLogin = true
+            name = ""
+            email = ""
+            password = ""
+            confirmPassword = ""
+            errorMessage = null
+        } else {
+            // Se já estiver no login, volta para Home
+            onBackToHome()
+        }
+    }
+
+
+    Column(modifier = modifier.fillMaxSize()) {
+        // Header
+        Surface(modifier = Modifier.fillMaxWidth(), color = Red600) {
+            Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Voltar",
+                        tint = Color.White
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = if (isLogin) "Entrar" else "Criar Conta",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color.White
+                )
+            }
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Login com Google
+            HemoamCard {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "Acesso Rápido", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Entre ou crie sua conta de forma rápida e segura",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    OutlinedButton(
+                        onClick = {
+                            scope.launch {
+                                isLoading = true
+                                errorMessage = null
+                                delay(2000)
+                                val user = User(
+                                    name = "João Silva",
+                                    email = "joao.silva@gmail.com",
+                                    avatar = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150",
+                                    provider = AuthProvider.GOOGLE
+                                )
+                                onAuthSucess(user)
+                                isLoading = false
+                            }
+                        },
+                        enabled = !isLoading,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)
+                    ) {
+                        // TODO: Trocar Box pelo Logo do Google
+                        Box(
+                            modifier = Modifier
+                                .size(20.dp)
+                                .background(color = Color.Cyan, shape = CircleShape)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(text = if (isLoading) "Conectando..." else "Continuar com Google")
+                    }
+                }
+            }
+
+            // Separador
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                HorizontalDivider(modifier = Modifier.weight(1f))
+                Text(
+                    text = "ou continue com email",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+                HorizontalDivider(modifier = Modifier.weight(1f))
+            }
+
+            // Formulário de Login/Cadastro
+            HemoamCard {
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text(
+                        text = if (isLogin) "Login" else "Criar Conta",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                    Text(
+                        text = if (isLogin) "Entre com seu email e senha" else "Preencha os dados para criar sua conta",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    if (!isLogin) {
+                        OutlinedTextField(
+                            value = name,
+                            onValueChange = { name = it; errorMessage = null },
+                            label = { Text("Nome Completo") },
+                            leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true,
+                            isError = errorMessage?.contains("Nome") == true
+                        )
+                    }
+
+                    OutlinedTextField(
+                        value = email,
+                        onValueChange = { email = it; errorMessage = null },
+                        label = { Text("E-mail") },
+                        leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        isError = errorMessage?.contains("Email") == true
+                    )
+
+                    OutlinedTextField(
+                        value = password,
+                        onValueChange = { password = it; errorMessage = null },
+                        label = { Text("Senha") },
+                        leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                        trailingIcon = {
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Icon(
+                                    // TODO: encontrar o icone adequado visivel/invisivel
+                                    imageVector = if (passwordVisible) Icons.Default.Favorite else Icons.Default.Lock,
+                                    contentDescription = if (passwordVisible) "Ocultar senha" else "Mostrar senha"
+                                )
+                            }
+                        },
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        isError = errorMessage?.contains("Senha") == true
+                    )
+
+                    if (!isLogin) {
+                        OutlinedTextField(
+                            value = confirmPassword,
+                            onValueChange = { confirmPassword = it; errorMessage = null },
+                            label = { Text("Confirmar Senha") },
+                            leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                            trailingIcon = {
+                                IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
+                                    Icon(
+                                        // TODO: encontrar o icone adequado visivel/invisivel
+                                        imageVector = if (confirmPasswordVisible) Icons.Default.Lock else Icons.Default.Favorite,
+                                        contentDescription = if (confirmPasswordVisible) "Ocultar senha" else "Mostrar senha"
+                                    )
+                                }
+                            },
+                            visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true,
+                            isError = errorMessage?.contains("coincidem") == true || errorMessage?.contains("caracteres") == true
+                        )
+                    }
+
+                    if (errorMessage != null) {
+                        Surface(color = Red50, shape = RoundedCornerShape(8.dp)) {
+                            Text(
+                                text = errorMessage!!,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Red700,
+                                modifier = Modifier.padding(12.dp)
+                            )
+                        }
+                    }
+
+                    HemoamButton(
+                        text = if (isLoading) {
+                            if (isLogin) "Entrando..." else "Criando conta..."
+                        } else {
+                            if (isLogin) "Entrar" else "Criar Conta"
+                        },
+                        onClick = {
+                            val validationError = validateForm()
+                            if (validationError != null) {
+                                errorMessage = validationError
+                                return@HemoamButton
+                            }
+
+                            scope.launch {
+                                isLoading = true
+                                val user = User(
+                                    id = System.currentTimeMillis(),
+                                    name = if (isLogin) "Usuário de Exemplo" else name,
+                                    email = email,
+                                    provider = AuthProvider.EMAIL
+                                )
+                                onAuthSucess(user)
+                                isLoading = false
+                            }
+                        },
+                        enabled = !isLoading,
+                        backgroundColor = Red600
+                    )
+                }
+            }
+
+            // Toggle entre Login e Cadastro
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = if (isLogin) "Não tem uma conta? " else "Já tem uma conta? ",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                TextButton(
+                    onClick = {
+                        isLogin = !isLogin
+                        name = ""
+                        email = ""
+                        password = ""
+                        confirmPassword = ""
+                        errorMessage = null
+                    }
+                ) {
+                    Text(
+                        text = if (isLogin) "Criar conta" else "Entrar",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Red600
+                    )
+                }
+            }
+
+            // Informações de Segurança
+            Surface(color = Blue50, shape = RoundedCornerShape(12.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(text = "Segurança:", style = MaterialTheme.typography.titleSmall, color = Blue800)
+                    Text(
+                        text = "Seus dados são protegidos e utilizados apenas para facilitar o processo de doação. Nunca compartilhamos informações pessoais com terceiros.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Blue700
+                    )
+                }
+            }
+        }
+    }
+}
+
