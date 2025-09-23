@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -72,6 +73,11 @@ fun HeManausApp() {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun HeManausAppPreview() {
+    HeManausApp()
+}
 
 
 
