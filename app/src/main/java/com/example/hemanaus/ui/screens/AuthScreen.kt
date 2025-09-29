@@ -57,6 +57,7 @@ import com.example.hemanaus.core.model.AuthProvider
 import com.example.hemanaus.core.model.User
 import com.example.hemanaus.ui.components.HemoamButton
 import com.example.hemanaus.ui.components.HemoamCard
+import com.google.firebase.auth.FirebaseAuth
 import com.hemoam.app.ui.theme.Blue50
 import com.hemoam.app.ui.theme.Blue700
 import com.hemoam.app.ui.theme.Blue800
@@ -83,6 +84,7 @@ fun AuthScreen(
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     val scope = rememberCoroutineScope()
+    val firebaseAuth = FirebaseAuth.getInstance()
 
     fun validateForm(): String? {
         return when {
@@ -160,7 +162,8 @@ fun AuthScreen(
                                     name = "João Silva",
                                     email = "joao.silva@gmail.com",
                                     avatar = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150",
-                                    provider = AuthProvider.GOOGLE
+                                    provider = AuthProvider.GOOGLE,
+                                    id = "google-uid-123456"
                                 )
                                 onAuthSucess(user)
                                 isLoading = false
@@ -308,14 +311,41 @@ fun AuthScreen(
 
                             scope.launch {
                                 isLoading = true
-                                val user = User(
-                                    id = System.currentTimeMillis(),
-                                    name = if (isLogin) "Usuário de Exemplo" else name,
-                                    email = email,
-                                    provider = AuthProvider.EMAIL
-                                )
-                                onAuthSucess(user)
-                                isLoading = false
+                                if (isLogin) {
+                                    firebaseAuth.signInWithEmailAndPassword(email, password)
+                                        .addOnCompleteListener { task ->
+                                            if (task.isSuccessful) {
+                                                val firebaseUser = task.result?.user
+                                                val user = User(
+                                                    id = firebaseUser?.uid ?: "",
+                                                    name = firebaseUser?.displayName ?: "",
+                                                    email = firebaseUser?.email ?: "",
+                                                    provider = AuthProvider.EMAIL
+                                                )
+                                                onAuthSucess(user)
+                                            } else {
+                                                errorMessage = task.exception?.message ?: "Ocorreu um erro"
+                                            }
+                                            isLoading = false
+                                        }
+                                } else {
+                                    firebaseAuth.createUserWithEmailAndPassword(email, password)
+                                        .addOnCompleteListener { task ->
+                                            if (task.isSuccessful) {
+                                                val firebaseUser = task.result?.user
+                                                val user = User(
+                                                    id = firebaseUser?.uid ?: "",
+                                                    name = name,
+                                                    email = email,
+                                                    provider = AuthProvider.EMAIL
+                                                )
+                                                onAuthSucess(user)
+                                            } else {
+                                                errorMessage = task.exception?.message ?: "Ocorreu um erro"
+                                            }
+                                            isLoading = false
+                                        }
+                                }
                             }
                         },
                         enabled = !isLoading,

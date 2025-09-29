@@ -1,7 +1,7 @@
 package com.example.hemanaus.core.model
 
 data class User(
-    val id: Long = System.currentTimeMillis(),
+    val id: String,
     val name: String,
     val email: String,
     val avatar: String? = null,
