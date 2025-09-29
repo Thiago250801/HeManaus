@@ -1,22 +1,58 @@
 package com.example.hemanaus.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Password
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.example.hemanaus.R
 import com.example.hemanaus.core.model.AuthProvider
 import com.example.hemanaus.core.model.User
 import com.example.hemanaus.ui.components.HemoamButton
@@ -50,6 +86,7 @@ fun AuthScreen(
 
     fun validateForm(): String? {
         return when {
+            email.isEmpty() && password.isEmpty() -> "E-mail e Senha são obrigatórios"
             email.isEmpty() -> "Email é obrigatório"
             password.isEmpty() -> "Senha é obrigatória"
             !isLogin && name.isEmpty() -> "Nome é obrigatório"
@@ -61,7 +98,6 @@ fun AuthScreen(
 
     val onBack: () -> Unit = {
         if (!isLogin) {
-            // Se estiver no criar conta, volta apenas para Login
             isLogin = true
             name = ""
             email = ""
@@ -69,11 +105,9 @@ fun AuthScreen(
             confirmPassword = ""
             errorMessage = null
         } else {
-            // Se já estiver no login, volta para Home
             onBackToHome()
         }
     }
-
 
     Column(modifier = modifier.fillMaxSize()) {
         // Header
@@ -81,7 +115,7 @@ fun AuthScreen(
             Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onBack) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Voltar",
                         tint = Color.White
                     )
@@ -115,6 +149,7 @@ fun AuthScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    // Botão Login com Google (oficial)
                     OutlinedButton(
                         onClick = {
                             scope.launch {
@@ -135,17 +170,23 @@ fun AuthScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(48.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)
+                        colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White),
+                        border = BorderStroke(1.dp, Color.LightGray),
+                        shape = RoundedCornerShape(8.dp)
                     ) {
-                        // TODO: Trocar Box pelo Logo do Google
-                        Box(
-                            modifier = Modifier
-                                .size(20.dp)
-                                .background(color = Color.Cyan, shape = CircleShape)
+                        Icon(
+                            painter = painterResource(id = R.drawable.google_icon),
+                            contentDescription = "Google logo",
+                            modifier = Modifier.size(20.dp),
+                            tint = Color.Unspecified // mantém as cores originais
                         )
                         Spacer(modifier = Modifier.width(12.dp))
-                        Text(text = if (isLoading) "Conectando..." else "Continuar com Google")
+                        Text(
+                            text = if (isLoading) "Conectando..." else "Continuar com Google",
+                            color = Color.Black
+                        )
                     }
+
                 }
             }
 
@@ -205,12 +246,11 @@ fun AuthScreen(
                         value = password,
                         onValueChange = { password = it; errorMessage = null },
                         label = { Text("Senha") },
-                        leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                        leadingIcon = { Icon(Icons.Default.Password, contentDescription = null) },
                         trailingIcon = {
                             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                 Icon(
-                                    // TODO: encontrar o icone adequado visivel/invisivel
-                                    imageVector = if (passwordVisible) Icons.Default.Favorite else Icons.Default.Lock,
+                                    imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                                     contentDescription = if (passwordVisible) "Ocultar senha" else "Mostrar senha"
                                 )
                             }
@@ -226,12 +266,11 @@ fun AuthScreen(
                             value = confirmPassword,
                             onValueChange = { confirmPassword = it; errorMessage = null },
                             label = { Text("Confirmar Senha") },
-                            leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                            leadingIcon = { Icon(Icons.Default.Password, contentDescription = null) },
                             trailingIcon = {
                                 IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
                                     Icon(
-                                        // TODO: encontrar o icone adequado visivel/invisivel
-                                        imageVector = if (confirmPasswordVisible) Icons.Default.Lock else Icons.Default.Favorite,
+                                        imageVector = if (confirmPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                                         contentDescription = if (confirmPasswordVisible) "Ocultar senha" else "Mostrar senha"
                                     )
                                 }
@@ -290,27 +329,32 @@ fun AuthScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = if (isLogin) "Não tem uma conta? " else "Já tem uma conta? ",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                TextButton(
-                    onClick = {
+                val prefixText = if (isLogin) "Não tem uma conta? " else "Já tem uma conta? "
+                val clickableText = if (isLogin) "Criar conta" else "Entrar"
+
+                val fullText = buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurfaceVariant)) {
+                        append(prefixText)
+                    }
+
+                    pushLink(LinkAnnotation.Clickable(tag = "toggle_action") {
                         isLogin = !isLogin
                         name = ""
                         email = ""
                         password = ""
                         confirmPassword = ""
                         errorMessage = null
+                    })
+                    withStyle(style = SpanStyle(color = Red600)) {
+                        append(clickableText)
                     }
-                ) {
-                    Text(
-                        text = if (isLogin) "Criar conta" else "Entrar",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Red600
-                    )
+                    pop()
                 }
+
+                BasicText(
+                    text = fullText,
+                    style = MaterialTheme.typography.bodySmall.copy(textAlign = TextAlign.Center)
+                )
             }
 
             // Informações de Segurança
@@ -327,4 +371,3 @@ fun AuthScreen(
         }
     }
 }
-
