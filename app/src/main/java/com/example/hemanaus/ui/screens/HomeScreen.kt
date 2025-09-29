@@ -1,6 +1,5 @@
 package com.example.hemanaus.ui.screens
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Group
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -27,26 +27,31 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.hemanaus.R
-import com.example.hemanaus.core.model.StockStatus
 import com.example.hemanaus.core.model.bloodStockLevel
 import com.example.hemanaus.ui.components.BloodStockItem
 import com.example.hemanaus.ui.components.HemoamCard
-import com.example.hemanaus.ui.components.StatusBadge
-import com.hemoam.app.ui.theme.*
-
+import com.hemoam.app.ui.theme.Gray500
+import com.hemoam.app.ui.theme.Green600
+import com.hemoam.app.ui.theme.Orange100
+import com.hemoam.app.ui.theme.Orange600
+import com.hemoam.app.ui.theme.Orange700
+import com.hemoam.app.ui.theme.Orange800
+import com.hemoam.app.ui.theme.Red100
+import com.hemoam.app.ui.theme.Red50
+import com.hemoam.app.ui.theme.Red600
+import com.hemoam.app.ui.theme.Red700
 
 
 @Composable
@@ -241,7 +246,7 @@ fun HomeScreen(
                             .padding(12.dp)
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.group),
+                            imageVector = Icons.Outlined.Group,
                             contentDescription = "Ícone de fila de transplantes",
                             modifier = Modifier.size(24.dp),
                             tint = Orange600
