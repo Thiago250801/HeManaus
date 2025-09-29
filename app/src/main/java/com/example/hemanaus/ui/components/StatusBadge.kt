@@ -10,7 +10,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hemanaus.core.model.StockStatus
-import com.hemoam.app.ui.theme.*
+import com.hemoam.app.ui.theme.Green100
+import com.hemoam.app.ui.theme.Green700
+import com.hemoam.app.ui.theme.Orange100
+import com.hemoam.app.ui.theme.Orange600
+import com.hemoam.app.ui.theme.Red100
+import com.hemoam.app.ui.theme.Red700
 
 @Composable
 fun StatusBadge(
