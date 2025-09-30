@@ -13,12 +13,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hemanaus.core.model.User
-import com.example.hemanaus.ui.components.UserInfo
 import com.example.hemanaus.ui.screens.AuthScreen
 import com.example.hemanaus.ui.screens.HomeScreen
 import com.example.hemanaus.ui.screens.RequirementsScreen
 import com.example.hemanaus.ui.screens.UserInfoScreen
 import com.google.firebase.auth.FirebaseAuth
+import com.hemoam.app.ui.screens.BookingScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -123,7 +124,23 @@ fun HeManausApp() {
                         navController.navigate("userInfo") {
                             popUpTo("requirements") { inclusive = true }
                         }
+                    },
+                    onAceppted = {
+                        navController.navigate("booking") {
+                            popUpTo("requirements") { inclusive = true }
+                        }
                     }
+                )
+            }
+
+            composable("booking") {
+                BookingScreen(
+                    onBack = {
+                        navController.navigate("requirements"){
+                            popUpTo("booking") { inclusive = true }
+                        }
+                    },
+                    onComplete = {}
                 )
             }
         }
