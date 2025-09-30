@@ -118,7 +118,13 @@ fun HeManausApp() {
             }
 
             composable("requirements") {
-                RequirementsScreen()
+                RequirementsScreen(
+                    onBack = {
+                        navController.navigate("userInfo") {
+                            popUpTo("requirements") { inclusive = true }
+                        }
+                    }
+                )
             }
         }
     }
