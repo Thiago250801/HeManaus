@@ -7,10 +7,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.hemanaus.core.model.User
 import com.example.hemanaus.ui.components.LabeledTextField
 import com.example.hemanaus.ui.components.UserInfo
+import com.example.hemanaus.ui.theme.Shapes
 import com.hemoam.app.ui.theme.Red600
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -124,6 +127,7 @@ fun UserInfoScreen(
                         .fillMaxWidth()
                         .height(48.dp),
                     enabled = isFormValid,
+                    shape = Shapes.large,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Red600,
                         disabledContainerColor = Red600.copy(alpha = 0.5f),
@@ -131,7 +135,9 @@ fun UserInfoScreen(
                         disabledContentColor = Color.White.copy(alpha = 0.7f)
                     )
                 ) {
-                    Text(text = "Prosseguir")
+                    Text(text = "Prosseguir",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 16.sp)
                 }
             }
         }
