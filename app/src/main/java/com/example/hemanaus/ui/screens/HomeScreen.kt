@@ -42,6 +42,7 @@ import coil.compose.AsyncImage
 import com.example.hemanaus.core.model.bloodStockLevel
 import com.example.hemanaus.ui.components.BloodStockItem
 import com.example.hemanaus.ui.components.HemoamCard
+import com.example.hemanaus.ui.theme.Shapes
 import com.hemoam.app.ui.theme.Gray500
 import com.hemoam.app.ui.theme.Green600
 import com.hemoam.app.ui.theme.Orange100
@@ -313,7 +314,7 @@ fun HomeScreen(
                         containerColor = Red600,
                         contentColor = Color.White
                     ),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = Shapes.large
                 ) {
                     Icon(
                         imageVector = Icons.Default.DateRange,
