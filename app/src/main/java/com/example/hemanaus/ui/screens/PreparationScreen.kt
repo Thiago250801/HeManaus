@@ -12,6 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hemanaus.core.model.Booking
+import com.example.hemanaus.core.viewmodel.BookingViewModel
 import com.example.hemanaus.ui.components.HemoamCard
 import com.example.hemanaus.ui.components.HemoamTopAppBar
 import com.example.hemanaus.ui.components.IconButton
@@ -21,10 +22,11 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreparationScreen(
-    booking: Booking,
+    bookingViewModel: BookingViewModel,
     onBack: () -> Unit,
     onCheckIn: () -> Unit
 ) {
+    val booking = bookingViewModel.booking.value ?: return
     Scaffold(
         topBar = {
             HemoamTopAppBar(
