@@ -22,6 +22,7 @@ import com.example.hemanaus.core.model.Achievement
 import com.example.hemanaus.core.model.Booking
 import com.example.hemanaus.core.model.DonationHistory
 import com.example.hemanaus.core.model.Impact
+import com.example.hemanaus.core.viewmodel.BookingViewModel
 import com.example.hemanaus.ui.components.HemoamCard
 import com.example.hemanaus.ui.components.HemoamTopAppBar
 import com.example.hemanaus.ui.components.ProgressIndicator
@@ -32,10 +33,11 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostDonationScreen(
-    booking: Booking,
+    bookingViewModel: BookingViewModel,
     onBack: () -> Unit,
     onNewDonation: () -> Unit
 ) {
+    val booking = bookingViewModel.booking.value ?: return
     val impact = remember {
         Impact(
             livesSaved = 4,
