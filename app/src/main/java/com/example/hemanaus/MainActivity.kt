@@ -14,11 +14,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hemanaus.core.model.User
 import com.example.hemanaus.ui.screens.AuthScreen
+import com.example.hemanaus.ui.screens.BookingScreen
 import com.example.hemanaus.ui.screens.HomeScreen
 import com.example.hemanaus.ui.screens.RequirementsScreen
 import com.example.hemanaus.ui.screens.UserInfoScreen
 import com.google.firebase.auth.FirebaseAuth
-import com.hemoam.app.ui.screens.BookingScreen
 
 
 class MainActivity : ComponentActivity() {
