@@ -7,23 +7,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.Icons.Filled
+import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hemoam.app.ui.theme.Gray100
 import com.hemoam.app.ui.theme.Gray400
 import com.hemoam.app.ui.theme.Gray500
 
-private val Filled.QrCode: ImageVector
-    get() {
-        TODO()
-    }
 
 @Composable
 fun QRCodePlaceholder(
