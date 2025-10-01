@@ -235,13 +235,7 @@ fun CheckInScreen(
             item {
                 Button(
                     onClick = {
-                        // 1. Inicia o estado de carregamento.
-                        isCheckingIn = true
-                        // 2. Simula uma operação assíncrona (como uma chamada de rede).
-                        kotlinx.coroutines.GlobalScope.launch {
-                            kotlinx.coroutines.delay(2000)
-                            onComplete() //3Notifica que o check-in foi concluído.
-                        }
+                        onComplete()
                     },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !isCheckingIn // O botão é desabilitado enquanto 'isCheckingIn' for true.
