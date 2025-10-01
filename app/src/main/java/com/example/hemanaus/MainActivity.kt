@@ -1,25 +1,25 @@
 package com.example.hemanaus
 
+import BookingScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hemanaus.core.model.User
-import com.example.hemanaus.ui.screens.AuthScreen
-import com.example.hemanaus.ui.screens.BookingScreen
-import com.example.hemanaus.ui.screens.HomeScreen
-import com.example.hemanaus.ui.screens.RequirementsScreen
-import com.example.hemanaus.ui.screens.UserInfoScreen
+import com.example.hemanaus.core.viewmodel.BookingViewModel
+import com.example.hemanaus.ui.screens.*
 import com.google.firebase.auth.FirebaseAuth
-
+import com.google.firebase.auth.UserProfileChangeRequest
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +36,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun HeManausApp() {
     val navController = rememberNavController()
-    var currentUser by remember { mutableStateOf<User?>(null) }
+    val bookingViewModel: BookingViewModel = viewModel()
     val auth = FirebaseAuth.getInstance()
+    var currentUser by remember { mutableStateOf<User?>(null) }
 
     // Observa mudanças de autenticação do Firebase
     LaunchedEffect(auth) {
@@ -49,7 +50,7 @@ fun HeManausApp() {
                     name = firebaseUser.displayName ?: "",
                     email = firebaseUser.email ?: "",
                     avatar = firebaseUser.photoUrl?.toString()
-                )
+                ).also { bookingViewModel.setUser(it) }
             } else {
                 null
             }
@@ -61,14 +62,12 @@ fun HeManausApp() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-
-
         NavHost(
             navController = navController,
             startDestination = "home",
             modifier = Modifier.fillMaxSize()
         ) {
-            // Home / Landing Page
+            // Home Screen
             composable("home") {
                 HomeScreen(onStartDonation = { navController.navigate("auth") })
             }
@@ -82,6 +81,7 @@ fun HeManausApp() {
                         }
                     },
                     onAuthSucess = { user ->
+                        bookingViewModel.setUser(user)
                         currentUser = user
                         navController.navigate("userInfo") {
                             popUpTo("auth") { inclusive = true }
@@ -94,57 +94,69 @@ fun HeManausApp() {
             composable("userInfo") {
                 currentUser?.let { user ->
                     UserInfoScreen(
+                        bookingViewModel = bookingViewModel,
                         user = user,
                         onLogout = {
                             FirebaseAuth.getInstance().signOut()
+                            bookingViewModel.clearBooking()
                             currentUser = null
                             navController.navigate("home") {
                                 popUpTo("userInfo") { inclusive = true }
                             }
                         },
                         onContinue = { fullName, phone ->
-                            // Atualiza o nome do usuário no Firebase
-                            val profileUpdates = com.google.firebase.auth.UserProfileChangeRequest.Builder()
+                            val profileUpdates = UserProfileChangeRequest.Builder()
                                 .setDisplayName(fullName)
                                 .build()
                             auth.currentUser?.updateProfile(profileUpdates)
 
-                            // Navega para a Requirements após atualizar as informações
-                            navController.navigate("requirements") {
+                            bookingViewModel.setUser(user.copy(name = fullName, phone = phone))
+                            navController.navigate("booking") {
                                 popUpTo("userInfo") { inclusive = true }
                             }
-                        }
+                        },
                     )
                 }
             }
 
-            composable("requirements") {
-                RequirementsScreen(
-                    onBack = {
-                        navController.navigate("userInfo") {
-                            popUpTo("requirements") { inclusive = true }
-                        }
-                    },
-                    onAceppted = {
-                        navController.navigate("booking") {
-                            popUpTo("requirements") { inclusive = true }
-                        }
-                    }
+            // Booking Screen
+            composable("booking") {
+                BookingScreen(
+                    bookingViewModel = bookingViewModel,
+                    onBack = { navController.navigate("userInfo") },
+                    onComplete = { navController.navigate("preparation") }
                 )
             }
 
-            composable("booking") {
-                BookingScreen(
-                    onBack = {
-                        navController.navigate("requirements"){
-                            popUpTo("booking") { inclusive = true }
-                        }
-                    },
-                    onComplete = {}
+            // Preparation Screen
+            composable("preparation") {
+                PreparationScreen(
+                    bookingViewModel = bookingViewModel,
+                    onBack = { navController.navigate("booking") },
+                    onCheckIn = { navController.navigate("checkin") }
+                )
+            }
+
+            // CheckIn Screen
+            composable("checkin") {
+                CheckInScreen(
+                    bookingViewModel = bookingViewModel,
+                    onBack = { navController.navigate("preparation") },
+                    onComplete = { navController.navigate("postDonation") }
+                )
+            }
+
+            // PostDonation Screen
+            composable("postDonation") {
+                PostDonationScreen(
+                    bookingViewModel = bookingViewModel,
+                    onBack = { navController.navigate("home") },
+                    onNewDonation = {
+                        bookingViewModel.clearBooking()
+                        navController.navigate("booking")
+                    }
                 )
             }
         }
     }
 }
-
-
