@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "938353706671",
+    "project_id": "hemanus-a29fa",
+    "storage_bucket": "hemanus-a29fa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938353706671:android:45c8c495de09ba6719f65a",
+        "android_client_info": {
+          "package_name": "com.example.hemanaus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "938353706671-131ck43fbrdjmg63coo7r5joh4ch3e10.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hemanaus",
+            "certificate_hash": "6128cd908a64540728d0dc20a1d73842597505f2"
+          }
+        },
+        {
+          "client_id": "938353706671-tb3dhlftt8eoa1j0c2tf5qkocba3ueom.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARuBd4GbRd6DmV5MUdyvQknoistS4FhSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "938353706671-tb3dhlftt8eoa1j0c2tf5qkocba3ueom.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
