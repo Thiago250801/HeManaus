@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hemanaus.core.model.Booking
+import com.example.hemanaus.core.viewmodel.BookingViewModel
 import com.example.hemanaus.ui.components.HemoamCard
 import com.example.hemanaus.ui.components.HemoamTopAppBar
 import com.example.hemanaus.ui.components.QRCodePlaceholder
@@ -24,13 +25,13 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CheckInScreen(
-    // Recebe o objeto 'Booking' com todos os dados do agendamento
-    booking: Booking,
+    bookingViewModel: BookingViewModel,
     // Função para ser chamada quando o usuário quiser voltar
     onBack: () -> Unit,
     // Função para ser chamada quando o check-in for concluído
     onComplete: () -> Unit
 ) {
+    val booking = bookingViewModel.booking.value ?: return
     var isCheckingIn by remember { mutableStateOf(false) }
 
     Scaffold(
