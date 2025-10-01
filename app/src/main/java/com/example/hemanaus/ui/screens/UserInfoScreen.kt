@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hemanaus.core.model.User
+import com.example.hemanaus.core.viewmodel.BookingViewModel
 import com.example.hemanaus.ui.components.LabeledTextField
 import com.example.hemanaus.ui.components.UserInfo
 import com.example.hemanaus.ui.theme.Shapes
@@ -20,6 +21,7 @@ import com.hemoam.app.ui.theme.Red600
 @Composable
 fun UserInfoScreen(
     user: User,
+    bookingViewModel: BookingViewModel,
     onLogout: () -> Unit,
     onContinue: (fullName: String, phone: String) -> Unit
 ) {
@@ -122,7 +124,13 @@ fun UserInfoScreen(
 
                 // Botão Prosseguir
                 Button(
-                    onClick = { onContinue(fullName, phone) },
+                    onClick = {
+                        val updatedUser = user.copy(
+                        name = fullName,
+                        phone = phone
+                    )
+                        bookingViewModel.setUser(updatedUser) // <-- salva no ViewModel
+                        onContinue(fullName, phone) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
