@@ -111,7 +111,7 @@ fun HeManausApp() {
                             auth.currentUser?.updateProfile(profileUpdates)
 
                             bookingViewModel.setUser(user.copy(name = fullName, phone = phone))
-                            navController.navigate("booking") {
+                            navController.navigate("requirements") {
                                 popUpTo("userInfo") { inclusive = true }
                             }
                         },
@@ -119,12 +119,27 @@ fun HeManausApp() {
                 }
             }
 
+            composable("requirements") {
+                RequirementsScreen(
+                    onBack = { navController.navigate("userInfo") },
+                    onAceppted = { navController.navigate("booking") }
+                )
+            }
+
             // Booking Screen
             composable("booking") {
                 BookingScreen(
                     bookingViewModel = bookingViewModel,
                     onBack = { navController.navigate("userInfo") },
-                    onComplete = { navController.navigate("preparation") }
+                    onComplete = { navController.navigate("confirmation") }
+                )
+            }
+
+            composable("confirmation") {
+                ConfirmationScreen(
+                    bookingViewModel = bookingViewModel,
+                    onBack = { navController.navigate("booking") },
+                    onConfirm = { navController.navigate("preparation") }
                 )
             }
 
