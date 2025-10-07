@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun BadgeComponent(
-    text: String,
+    text: String?,
     icon: ImageVector? = null,
     backgroundColor: Color = Color.Gray,
     contentColor: Color? = Color.White,
@@ -40,14 +40,14 @@ fun BadgeComponent(
                 imageVector = icon,
                 contentDescription = null,
                 tint = contentColor ?: MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(12.dp)
+                modifier = Modifier.size(16.dp)
             )
         }
 
         // Texto
         if (contentColor != null) {
             Text(
-                text = text,
+                text = text ?: "",
                 color = contentColor,
                 style = MaterialTheme.typography.labelSmall.copy(fontSize = textSize),
                 maxLines = 1
