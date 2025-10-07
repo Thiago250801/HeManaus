@@ -5,16 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -24,20 +15,8 @@ import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -63,6 +42,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.hemoam.app.ui.theme.Red600
 import com.hemoam.app.ui.theme.Red700
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthScreen(
     onBackToHome: () -> Unit,
@@ -82,7 +62,7 @@ fun AuthScreen(
     var confirmPasswordVisible by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    // --- Configuração do Google Sign-In ---
+    // --- Google Sign-In setup ---
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestIdToken(context.getString(R.string.default_web_client_id))
         .requestEmail()
@@ -143,29 +123,37 @@ fun AuthScreen(
         }
     }
 
-    Column(modifier = modifier.fillMaxSize()) {
-        // --- Header ---
-        Surface(modifier = Modifier.fillMaxWidth(), color = Red600) {
-            Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = onBack) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Voltar",
-                        tint = Color.White
+    // --- Scaffold com TopAppBar ---
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { onBack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Voltar",
+                            tint = Color.White
+                        )
+                    }
+                },
+                title = {
+                    Text(
+                        text = if (isLogin) "Entrar" else "Criar Conta",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = Color.White
                     )
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = if (isLogin) "Entrar" else "Criar Conta",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.White
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Red600
                 )
-            }
+            )
         }
+    ) { paddingValues ->
 
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
+                .padding(paddingValues)
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -371,7 +359,7 @@ fun AuthScreen(
                 }
             }
 
-            // --- Toggle Login/Cadastro ---
+            // --- Alternar Login/Cadastro ---
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
