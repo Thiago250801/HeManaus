@@ -1,3 +1,4 @@
+import android.app.DatePickerDialog
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,14 +39,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hemanaus.core.model.Booking
 import com.example.hemanaus.core.model.DonationType
+import com.example.hemanaus.core.viewmodel.BookingViewModel
 import com.example.hemanaus.ui.components.HemoamCard
 import com.hemoam.app.ui.theme.Red600
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import android.app.DatePickerDialog
-import com.example.hemanaus.core.viewmodel.BookingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,10 +66,20 @@ fun BookingScreen(
             TopAppBar(
                 navigationIcon = {
                     IconButton(onClick = { onBack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar", tint = Color.White)
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Voltar",
+                            tint = Color.White
+                        )
                     }
                 },
-                title = { Text("Agendamento", style = MaterialTheme.typography.titleLarge, color = Color.White) },
+                title = {
+                    Text(
+                        "Agendamento",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = Color.White
+                    )
+                },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Red600)
             )
         }
@@ -87,12 +97,18 @@ fun BookingScreen(
                 HemoamCard(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text("Tipo de Doação", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+                    Text(
+                        "Tipo de Doação",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     var expanded by remember { mutableStateOf(false) }
-                    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
+                    ExposedDropdownMenuBox(
+                        expanded = expanded,
+                        onExpandedChange = { expanded = !expanded }) {
                         OutlinedTextField(
                             readOnly = true,
                             value = selectedDonationType.displayName,
@@ -104,8 +120,10 @@ fun BookingScreen(
                                 .fillMaxWidth()
                         )
 
-                        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                            DonationType.values().forEach { type ->
+                        ExposedDropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }) {
+                            DonationType.entries.forEach { type ->
                                 DropdownMenuItem(
                                     text = { Text(type.displayName) },
                                     onClick = {
@@ -124,12 +142,19 @@ fun BookingScreen(
                 HemoamCard(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text("Escolha a Data", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+                    Text(
+                        "Escolha a Data",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     var showDatePicker by remember { mutableStateOf(false) }
-                    OutlinedButton(onClick = { showDatePicker = true }, modifier = Modifier.fillMaxWidth()) {
+                    OutlinedButton(
+                        onClick = { showDatePicker = true },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         Text(selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                     }
 
@@ -154,7 +179,11 @@ fun BookingScreen(
                 HemoamCard(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text("Horário Disponível", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+                    Text(
+                        "Horário Disponível",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -163,17 +192,27 @@ fun BookingScreen(
 
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         timeSlots.chunked(3).forEach { rowSlots ->
-                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
                                 rowSlots.forEach { time ->
                                     val isSelected = time == selectedTimeState.value
                                     Button(
-                                        onClick = { selectedTimeState.value = time; selectedTime = time },
+                                        onClick = {
+                                            selectedTimeState.value = time; selectedTime = time
+                                        },
                                         colors = ButtonDefaults.buttonColors(
                                             containerColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
                                             contentColor = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface
                                         ),
-                                        border = if (!isSelected) BorderStroke(1.dp, Color.Gray) else null,
-                                        modifier = Modifier.weight(1f).height(48.dp)
+                                        border = if (!isSelected) BorderStroke(
+                                            1.dp,
+                                            Color.Gray
+                                        ) else null,
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .height(48.dp)
                                     ) {
                                         Text(time.format(DateTimeFormatter.ofPattern("HH:mm")))
                                     }
@@ -189,17 +228,17 @@ fun BookingScreen(
                 Button(
                     onClick = {
                         bookingViewModel.setBooking(
-                        Booking(
-                            id = System.currentTimeMillis(),
-                            name = user?.name ?: "",
-                            email = user?.email ?: "",
-                            phone = user?.phone ?: "",
-                            selectedDate = selectedDate,
-                            selectedTime = selectedTime,
-                            donationType = selectedDonationType,
-                            location = location
+                            Booking(
+                                id = System.currentTimeMillis(),
+                                name = user?.name ?: "",
+                                email = user?.email ?: "",
+                                phone = user?.phone ?: "",
+                                selectedDate = selectedDate,
+                                selectedTime = selectedTime,
+                                donationType = selectedDonationType,
+                                location = location
+                            )
                         )
-                    )
                         onComplete()
                     },
                     modifier = Modifier
@@ -221,7 +260,9 @@ fun gerarHorarios(): List<LocalTime> {
     while (hora < 16 || (hora == 16 && minuto == 0)) {
         horarios.add(LocalTime.of(hora, minuto))
         minuto += 30
-        if (minuto == 60) { minuto = 0; hora++ }
+        if (minuto == 60) {
+            minuto = 0; hora++
+        }
     }
     return horarios
 }
