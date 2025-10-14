@@ -28,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -137,7 +138,7 @@ fun BookingScreen(
                 }
             }
 
-            // Card 2 - Escolha a Data
+// Card 2 - Escolha a Data
             item {
                 HemoamCard(
                     modifier = Modifier.fillMaxWidth(),
@@ -151,6 +152,7 @@ fun BookingScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     var showDatePicker by remember { mutableStateOf(false) }
+
                     OutlinedButton(
                         onClick = { showDatePicker = true },
                         modifier = Modifier.fillMaxWidth()
@@ -160,7 +162,7 @@ fun BookingScreen(
 
                     if (showDatePicker) {
                         val today = Calendar.getInstance()
-                        DatePickerDialog(
+                        val datePickerDialog = DatePickerDialog(
                             context,
                             { _, year, month, dayOfMonth ->
                                 selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
@@ -169,12 +171,17 @@ fun BookingScreen(
                             selectedDate.year,
                             selectedDate.monthValue - 1,
                             selectedDate.dayOfMonth
-                        ).show()
+                        )
+
+                        // Impede seleção de dias anteriores a hoje
+                        datePickerDialog.datePicker.minDate = today.timeInMillis
+
+                        datePickerDialog.show()
                     }
                 }
             }
 
-            // Card 3 - Horário Disponível
+// Card 3 - Horário Disponível
             item {
                 HemoamCard(
                     modifier = Modifier.fillMaxWidth(),
@@ -187,34 +194,58 @@ fun BookingScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    val timeSlots = gerarHorarios()
+                    // Lista de horários completa (8h às 16h)
+                    val allSlots = gerarHorarios()
+
+                    // Estado do horário selecionado
                     val selectedTimeState = remember { mutableStateOf(selectedTime) }
 
+                    // Horário atual
+                    val now = LocalTime.now()
+
+                    // Renderização da grade de botões
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        timeSlots.chunked(3).forEach { rowSlots ->
+                        allSlots.chunked(3).forEach { rowSlots ->
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 rowSlots.forEach { time ->
+                                    // Desativar se for hoje e o horário já passou
+                                    val isDisabled =
+                                        selectedDate.isEqual(LocalDate.now()) && time.isBefore(now)
+
                                     val isSelected = time == selectedTimeState.value
+
                                     Button(
                                         onClick = {
-                                            selectedTimeState.value = time; selectedTime = time
+                                            selectedTimeState.value = time
+                                            selectedTime = time
                                         },
+                                        enabled = !isDisabled,
                                         colors = ButtonDefaults.buttonColors(
-                                            containerColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent,
-                                            contentColor = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface
+                                            containerColor = when {
+                                                isDisabled -> Color.LightGray.copy(alpha = 0.4f)
+                                                isSelected -> Red600
+                                                else -> Color.Transparent
+                                            },
+                                            contentColor = when {
+                                                isDisabled -> Color.Gray
+                                                isSelected -> Color.White
+                                                else -> MaterialTheme.colorScheme.onSurface
+                                            }
                                         ),
-                                        border = if (!isSelected) BorderStroke(
-                                            1.dp,
-                                            Color.Gray
-                                        ) else null,
+                                        border = if (!isSelected && !isDisabled)
+                                            BorderStroke(1.dp, Color.Gray)
+                                        else null,
                                         modifier = Modifier
                                             .weight(1f)
                                             .height(48.dp)
                                     ) {
-                                        Text(time.format(DateTimeFormatter.ofPattern("HH:mm")))
+                                        Text(
+                                            time.format(DateTimeFormatter.ofPattern("HH:mm")),
+                                            fontSize = 14.sp
+                                        )
                                     }
                                 }
                             }
@@ -222,6 +253,7 @@ fun BookingScreen(
                     }
                 }
             }
+
 
             // Botão Confirmar
             item {
@@ -243,8 +275,13 @@ fun BookingScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp)
-                ) {
+                        .height(50.dp),
+                    shape = MaterialTheme.shapes.large,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Red600,
+                        contentColor = Color.White,
+                    ),
+                ){
                     Text("Confirmar Agendamento", fontSize = 16.sp)
                 }
             }
