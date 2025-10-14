@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.DateRange
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.WavingHand
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,6 +39,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.LightGray
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,6 +51,8 @@ import com.example.hemanaus.core.viewmodel.BookingViewModel
 import com.example.hemanaus.ui.components.HemoamCard
 import com.example.hemanaus.ui.components.HemoamTopAppBar
 import com.example.hemanaus.ui.components.QRCodePlaceholder
+import com.hemoam.app.ui.theme.Gray100
+import com.hemoam.app.ui.theme.Gray500
 import com.hemoam.app.ui.theme.Green600
 import java.time.format.DateTimeFormatter
 
@@ -90,7 +98,7 @@ fun CheckInScreen(
                         Icon(
                             imageVector = Icons.Default.WavingHand,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
+                            tint = Green600,
                             modifier = Modifier.size(48.dp)
                         )
 
@@ -113,22 +121,26 @@ fun CheckInScreen(
 
             // --- ITEM 2: QR CODE PARA CHECK-IN ---
             item {
-                HemoamCard {
+                HemoamCard (
+                    borderColor = LightGray
+                ){
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier.padding(16.dp),
                     ) {
                         Text(
                             text = "Escaneie o QR Code",
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(top = 8.dp)
                         )
 
                         Text(
                             text = "Mostre este código na recepção para fazer seu check-in",
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
                         )
 
                         QRCodePlaceholder()
@@ -137,7 +149,7 @@ fun CheckInScreen(
                             text = "ID: ${booking.id}",
                             fontSize = 14.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
+                            fontFamily = FontFamily.Monospace,
                         )
                     }
                 }
@@ -145,18 +157,23 @@ fun CheckInScreen(
 
             // --- ITEM 3: DETALHES DO AGENDAMENTO ---
             item {
-                HemoamCard {
+                HemoamCard(
+                    borderColor = LightGray
+                ) {
                     Text(
                         text = "Detalhes do Agendamento",
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(start = 16.dp).padding(top = 8.dp),
+
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.padding(start = 16.dp),
                     ) {
                         CheckInDetailRow(
                             icon = Icons.Default.DateRange,
@@ -185,53 +202,26 @@ fun CheckInScreen(
                 }
             }
 
-            // Queue information
-            item {
-                HemoamCard {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.People,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.size(24.dp)
-                        )
-
-                        Column(
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(
-                                text = "Posição na fila",
-                                fontWeight = FontWeight.Medium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Text(
-                                text = "Você é o 3º da fila - tempo estimado: 15 min",
-                                fontSize = 14.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                }
-            }
 
             // What to expect
             item {
-                HemoamCard {
+                HemoamCard (
+                    borderColor = LightGray
+                ){
                     Text(
                         text = "O que esperar",
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(start = 16.dp).padding(top = 8.dp),
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.padding(start = 16.dp),
+                        ) {
                         ProcessStep(
                             step = "1",
                             title = "Triagem",
@@ -265,7 +255,14 @@ fun CheckInScreen(
                     onClick = {
                         onComplete()
                     },
+                    colors = ButtonColors(
+                        containerColor = Green600,
+                        contentColor = Color.White,
+                        disabledContainerColor = Gray100,
+                        disabledContentColor = Gray500
+                    ),
                     modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.large,
                     enabled = !isCheckingIn // O botão é desabilitado enquanto 'isCheckingIn' for true.
                 ) {
                     // Exibe um indicador de progresso circular se estiver fazendo check-in
@@ -283,28 +280,13 @@ fun CheckInScreen(
                 }
             }
 
-            // Help section
-            item {
-                OutlinedButton(
-                    onClick = { },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Help,
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Precisa de ajuda?")
-                }
-            }
         }
     }
 }
 
 @Composable
 private fun CheckInDetailRow(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     label: String,
     value: String
 ) {
@@ -315,7 +297,7 @@ private fun CheckInDetailRow(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
+            tint = Green600,
             modifier = Modifier.size(20.dp)
         )
 
@@ -348,8 +330,8 @@ private fun ProcessStep(
     ) {
         Surface(
             modifier = Modifier.size(24.dp),
-            shape = androidx.compose.foundation.shape.CircleShape,
-            color = MaterialTheme.colorScheme.primary
+            shape = CircleShape,
+            color = Green600
         ) {
             Box(
                 contentAlignment = Alignment.Center
