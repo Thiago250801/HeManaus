@@ -62,6 +62,8 @@ fun AuthScreen(
     var confirmPasswordVisible by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    /// Quando n estiver em demo passar valor para false
+    val useMockGoogleLogin = true
     // --- Google Sign-In setup ---
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestIdToken(context.getString(R.string.default_web_client_id))
@@ -173,9 +175,22 @@ fun AuthScreen(
 
                     OutlinedButton(
                         onClick = {
-                            isLoading = true
-                            val signInIntent: Intent = googleSignInClient.signInIntent
-                            launcher.launch(signInIntent)
+                            if (useMockGoogleLogin) {
+                                // Mock de usuário
+                                val user = User(
+                                    id = "mock_google_id",
+                                    name = "Usuário Demo",
+                                    email = "demo@hemanaus.com",
+                                    avatar = null,
+                                    provider = AuthProvider.GOOGLE
+                                )
+                                onAuthSucess(user)
+                            } else {
+                                // Código real de login Google
+                                isLoading = true
+                                val signInIntent: Intent = googleSignInClient.signInIntent
+                                launcher.launch(signInIntent)
+                            }
                         },
                         enabled = !isLoading,
                         modifier = Modifier
