@@ -31,7 +31,7 @@ local.properties
 
 # IDE specific
 *.iml
-.idea/
+*.idea/
 .DS_Store
 *.hprof
 
