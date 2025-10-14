@@ -166,10 +166,6 @@ fun HeManausApp() {
                 PostDonationScreen(
                     bookingViewModel = bookingViewModel,
                     onBack = { navController.navigate("home") },
-                    onNewDonation = {
-                        bookingViewModel.clearBooking()
-                        navController.navigate("booking")
-                    }
                 )
             }
         }
