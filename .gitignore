@@ -43,3 +43,6 @@ obj/
 
 # Misc
 *.log
+
+# Cache files
+.idea/*
